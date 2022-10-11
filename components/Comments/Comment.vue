@@ -1,11 +1,13 @@
 <template>
-  <div class="post">
-    <div class="post__data">
-      <div class="post__data_col post__data_id">{{ post.id }}</div>
-      <div class="post__data_col post__data_title">{{ post.name }}</div>
-      <div class="post__data_col post__data_body">{{ post.email }}</div>
-      <nuxt-link :to="`/comments/${post.id}`" :style="{'textDecoration': 'none', 'display': 'contents'}">
-        <div class="post__data_col post__data_btn" ><button type="button" class="post__data_posts" @click="showId(post.id)">Detail</button></div>
+  <div class="comment-item">
+    <div class="comment-item__data">
+      <div class="comment-item__data_col post__data_id">{{ comment.postId }}</div>
+      <div class="comment-item__data_col post__data_id">{{ comment.id }}</div>
+      <div class="comment-item__data_col post__data_title">{{ comment.name }}</div>
+      <div class="comment-item__data_col post__data_body">{{ comment.email }}</div>
+      <div class="comment-item__data_col post__data_body">{{ comment.body }}</div>
+      <nuxt-link :to="'/'" :style="{'textDecoration': 'none', 'display': 'contents'}">
+        <div class="comment-item__data_col comment-item__data_btn" ><button type="button" class="comment-item__data_posts" @click="showId(comment.id)">Home</button></div>
       </nuxt-link>
     </div>
   </div>
@@ -15,9 +17,9 @@
 
 <script>
 export default {
-  name: 'Post',
+  name: 'Comment',
   props: {
-    post: {
+    comment: {
       type: Object,
       default: () => {}
     }
@@ -35,17 +37,16 @@ export default {
 </script>
 
 <style lang="scss">
-.post {
+.comment-item {
   display: flex;
   &__data {
     display: flex;
     justify-content: space-around;
     width: 100%;
-    height: 120px;
     border-bottom: 1px solid #000;
     &_col {
       flex-basis: 44%;
-      margin: 0 20px;
+      margin: 0 20px 0 40px;
       display: flex;
       justify-content: flex-start;
       align-items: center;

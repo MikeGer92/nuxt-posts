@@ -6,12 +6,37 @@
       </h1>
       <div class="links">
         <PostsTable
+        v-if="!loading && showTable"
         :columns="columns"
         :bodyData="postsData"
         @clickUp="sortByColumnUp"
         @clickDown="sortByColumnDown"
       />
       </div>
+    </div>
+    <div class="paginate">
+      <div class="paginate__prev" @click="maxPageDown">&lt;</div>
+      <div class="paginate__page"
+        v-if="page>10"
+        :class="{'paginate__page': true, 'paginate__page_active': page === firstPage }"
+        @click="changePage(firstPage)"
+      >
+        {{ startPage }}</div>
+      <div class="paginate__page_hide" v-if="page>10">...</div>
+      <div class="paginate__page"
+      v-for="pageNum in maxPage"
+      :key="pageNum"
+      :class="{'paginate__page': true, 'paginate__page_active': page === pageNum}"
+      @click="changePage(pageNum)"
+    >
+      {{ pageNum }}</div>
+      <div class="paginate__page_hide">...</div>
+      <div class="paginate__page"
+        :class="{'paginate__page': true, 'paginate__page_active': page === totalPages }"
+        @click="changePage(totalPages)"
+      >
+        {{ totalPages }}</div>
+        <div class="paginate__next" @click="maxPageUp">></div>
     </div>
   </div>
 </template>
@@ -25,18 +50,71 @@ export default {
   },
   data() {
     return {
+      showTable: false,
       columns: ['id', 'name', 'email'],
-      postsData: []
+      postsData: [],
+      loading: true,
+      page: 1,
+      limit: 10,
+      totalPages: 0,
+      firstPage: 6,
+      maxPage: 20,
+      shift: 0,
+      startPage: 1
+    }
+  },
+  computed: {
+    getShift() {
+      return 0 ? this.page < 10: this.shift + this.page
     }
   },
   mounted() {
-    this.getPosts()
+    // this.$nextTick(() => {
+    //   this.$nuxt.$loading.start()
+    //   this.loading = true
+      this.getPosts()
+      // setTimeout(() => this.$nuxt.$loading.finish(), 200)
+      // this.loading = false
+    // })
   },
   methods: {
+    getLoader() {
+      this.$nextTick(() => {
+        this.$nuxt.$loading.start()
+        setTimeout(() => this.$nuxt.$loading.finish(), 500)
+      })
+    },
+    changePage(num) {
+      this.page = num
+      this.getPosts()
+    },
+    maxPageUp() {
+      if (this.maxPage < this.totalPages ) {
+        this.maxPage += 1
+        this.page += 1
+      } else {
+        this.maxPage = 50
+        this.page= 50
+      }
+      this.getPosts()
+    },
+    maxPageDown() {
+      if (this.page > 1) {
+        this.maxPage -= 1
+        this.page -= 1
+      } else {
+        this.maxPage = 20
+        this.page = 1
+      }
+      this.getPosts()
+    },
     async getPosts() {
-      await axios.get('https://jsonplaceholder.typicode.com/comments')
+      await axios.get('https://jsonplaceholder.typicode.com/comments', { params: { _page: this.page, _limit: this.limit } })
         .then(res => {
-        this.postsData = res.data
+          this.postsData = res.data
+          this.showTable = true
+          this.loading = false
+          this.totalPages = Math.ceil(res.headers['x-total-count'] / this.limit)
         })
         .catch(err => {
           if (err.response) {
@@ -51,6 +129,7 @@ export default {
           }
         }
       )
+
     },
     sortByColumnUp(col) {
       if(col === 'address') {
@@ -78,11 +157,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+[v-cloak] {
+    display: none;
+}
 .container {
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -108,5 +191,36 @@ export default {
 
 .links {
   padding-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+.paginate {
+  margin: 50px 0;
+  display: flex;
+  flex-direction: row;
+  font-size: 20px;
+  flex-wrap: wrap;
+  &__page {
+    margin: 0 5px;
+    width: 35px;
+    height: 42px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    padding: 5px;
+    &_active {
+      border: 2px solid teal;
+      color: teal;
+    }
+    &_hide {
+      align-self: flex-end;
+      margin: 0 5px;
+    }
+  }
+  &__prev, &__next {
+    align-self: center;
+    font-size: 24px;
+    margin: 0 10px;
+  }
 }
 </style>
