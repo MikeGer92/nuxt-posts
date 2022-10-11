@@ -6,6 +6,7 @@
       </h1>
       <div class="links">
         <PostsTable
+        v-if="!loading && showTable"
         :columns="columns"
         :bodyData="postsData"
         @clickUp="sortByColumnUp"
@@ -25,18 +26,34 @@ export default {
   },
   data() {
     return {
+      showTable: false,
       columns: ['id', 'name', 'email'],
-      postsData: []
+      postsData: [],
+      loading: true
     }
   },
   mounted() {
-    this.getPosts()
+    // this.$nextTick(() => {
+    //   this.$nuxt.$loading.start()
+    //   this.loading = true
+      this.getPosts()
+      // setTimeout(() => this.$nuxt.$loading.finish(), 200)
+      // this.loading = false
+    // })
   },
   methods: {
+    getLoader() {
+      this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+      setTimeout(() => this.$nuxt.$loading.finish(), 500)
+    })
+    },
     async getPosts() {
       await axios.get('https://jsonplaceholder.typicode.com/comments')
         .then(res => {
-        this.postsData = res.data
+          this.postsData = res.data
+          this.showTable = true
+          this.loading = false
         })
         .catch(err => {
           if (err.response) {
@@ -51,6 +68,7 @@ export default {
           }
         }
       )
+
     },
     sortByColumnUp(col) {
       if(col === 'address') {
@@ -78,7 +96,10 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+[v-cloak] {
+    display: none;
+}
 .container {
   margin: 0 auto;
   min-height: 100vh;
@@ -108,5 +129,7 @@ export default {
 
 .links {
   padding-top: 15px;
+  display: flex;
+  justify-content: center;
 }
 </style>

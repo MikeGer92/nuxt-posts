@@ -4,9 +4,9 @@
       <div class="post__data_col post__data_id">{{ post.id }}</div>
       <div class="post__data_col post__data_title">{{ post.name }}</div>
       <div class="post__data_col post__data_body">{{ post.email }}</div>
-      <router-link :to="`/posts/${post.id}/comments`" :style="{'textDecoration': 'none', 'display': 'contents'}">
-        <div class="post__data_col post__data_btn" ><button type="button" class="post__data_posts">Detail</button></div>
-      </router-link>
+      <nuxt-link :to="`/comments/${post.id}`" :style="{'textDecoration': 'none', 'display': 'contents'}">
+        <div class="post__data_col post__data_btn" ><button type="button" class="post__data_posts" @click="showId(post.id)">Detail</button></div>
+      </nuxt-link>
     </div>
   </div>
 
@@ -26,6 +26,11 @@ export default {
     return {
     }
   },
+  methods: {
+    showId(id) {
+      console.log(id)
+    }
+  }
 }
 </script>
 
