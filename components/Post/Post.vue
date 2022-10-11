@@ -60,7 +60,7 @@ export default {
     }
     &_btn {
       & button {
-        width: 70%;
+        width: 100%;
         height: 40%;
         border-radius: 10%;
        cursor: pointer;

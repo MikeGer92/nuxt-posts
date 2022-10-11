@@ -55,9 +55,6 @@ export default {
       &:first-child {
         flex-basis: 5%;
       }
-      // &:nth-child(3) {
-      //   flex-basis: 5%;
-      // }
       &:last-child {
         flex-basis: 7%;
       }
