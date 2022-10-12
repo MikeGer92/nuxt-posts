@@ -19,7 +19,7 @@
       <div class="paginate__page"
         v-if="page>11"
         :class="{'paginate__page': true, 'paginate__page_active': page === this.startPage }"
-        @click="changePage(this.startPage)"
+        @click="changePage(startPage)"
       >
         {{ startPage }}</div>
       <div class="paginate__page_hide" v-if="page>12">...</div>
@@ -84,6 +84,7 @@ export default {
     changePage(num) {
       this.page = num
       this.getPosts()
+      console.log(num)
     },
     maxPageUp() {
       if (this.page < this.totalPages ) {
