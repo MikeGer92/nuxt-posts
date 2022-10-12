@@ -205,8 +205,8 @@ export default {
     border: 1px solid black;
     padding: 5px;
     &_active {
-      border: 2px solid teal;
-      color: teal;
+      border: 2px solid #8e7bea;
+      color: #8e7bea;
     }
     &_hide {
       align-self: flex-end;

@@ -38,7 +38,7 @@ export default {
     display: flex;
     justify-content: space-around;
     width: 100%;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid teal;
     &_col {
       flex-basis: 44%;
       margin: 0 20px 0 40px;
@@ -62,7 +62,14 @@ export default {
         width: 100%;
         height: 40%;
         border-radius: 10%;
-       cursor: pointer;
+        cursor: pointer;
+        box-shadow: 3px 3px 0 0 teal;
+        &:hover {
+          box-shadow: none;
+          background: teal;
+          color: white;
+          border: 1px solid white;
+        }
       }
     }
   }
