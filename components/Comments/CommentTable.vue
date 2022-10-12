@@ -53,13 +53,14 @@ export default {
   flex-direction: column;
   width: 90%;
   max-width: 1600px;
-  border: 1px solid black;
+  border: 2px solid teal;
   &__header {
     display: flex;
     width: 100%;
     height: 70px;
-    background: #e9e9e9;
-    border-bottom: 5px double #000;
+    background: teal;
+    border-bottom: 5px double #FFF;
+    color: #FFF;
     font-weight: 800;
     &_col {
       margin: 0 20px;

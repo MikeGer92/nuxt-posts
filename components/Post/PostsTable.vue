@@ -3,8 +3,10 @@
     <div class="posts-table__header">
       <div class="posts-table__header_col" v-for="col in columns" :key="col">{{ capitalize(col) }}
         <div class="posts-table__header_col-img">
-          <div class="posts-table__header_col-img--up" @click="sendClickUp(col)"><img :src="require(`@/assets/images/sortDown.png`)" /></div>
-          <div class="posts-table__header_col-img--down" @click="sendClickDown(col)"><img :src="require(`@/assets/images/sortDown.png`)" /></div>
+          <div v-if="sortUp" class="posts-table__header_col-img--up" @click="sendClickUp(col)"><img :src="require(`@/assets/images/sortActive.png`)" /></div>
+          <div v-else class="posts-table__header_col-img--up" @click="sendClickUp(col)"><img :src="require(`@/assets/images/sortDown.png`)" /></div>
+          <div v-if="sortDown" class="posts-table__header_col-img--down" @click="sendClickDown(col)"><img :src="require(`@/assets/images/sortActive.png`)" /></div>
+          <div v-else class="posts-table__header_col-img--down" @click="sendClickDown(col)"><img :src="require(`@/assets/images/sortDown.png`)" /></div>
         </div>
       </div>
     </div>
@@ -32,17 +34,22 @@ export default {
   },
   data() {
     return {
-
+      sortUp: true,
+      sortDown: false,
     }
   },
   methods: {
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
-        sendClickUp(col) {
+    sendClickUp(col) {
+      this.sortUp = true
+      this.sortDown = false
       this.$emit('clickUp', col)
     },
     sendClickDown(col) {
+      this.sortUp = false
+      this.sortDown = true
       this.$emit('clickDown', col)
     },
   }
@@ -56,13 +63,14 @@ export default {
   flex-direction: column;
   width: 90%;
   max-width: 1600px;
-  border: 1px solid black;
+  border: 2px solid #8e7bea;
   &__header {
     display: flex;
     width: 100%;
     height: 70px;
-    background: #e9e9e9;
-    border-bottom: 5px double #000;
+    background: #8e7bea;
+    border-bottom: 5px double #FFF;
+    color: #FFF;
     font-weight: 800;
     &_col {
       margin: 0 20px;
@@ -81,7 +89,7 @@ export default {
       &:last-child {
         flex-basis: 7%;
       }
-            &-img {
+      &-img {
         display: flex;
         flex-direction: column;
         justify-content: center;

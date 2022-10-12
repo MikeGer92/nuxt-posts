@@ -37,7 +37,7 @@ export default {
     justify-content: space-around;
     width: 100%;
     height: 120px;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #8e7bea;
     &_col {
       flex-basis: 44%;
       margin: 0 20px;
@@ -59,6 +59,13 @@ export default {
         height: 40%;
         border-radius: 10%;
        cursor: pointer;
+       box-shadow: 3px 3px 0 0 #8e7bea;
+       &:hover {
+        box-shadow: none;
+        background: #8e7bea;
+        color: white;
+        border: 1px solid white;
+       }
       }
     }
   }
