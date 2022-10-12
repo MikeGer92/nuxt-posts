@@ -17,21 +17,22 @@
     <div class="paginate">
       <div class="paginate__prev" @click="maxPageDown">&lt;</div>
       <div class="paginate__page"
-        v-if="page>10"
-        :class="{'paginate__page': true, 'paginate__page_active': page === firstPage }"
-        @click="changePage(firstPage)"
+        v-if="page>11"
+        :class="{'paginate__page': true, 'paginate__page_active': page === this.startPage }"
+        @click="changePage(this.startPage)"
       >
         {{ startPage }}</div>
-      <div class="paginate__page_hide" v-if="page>10">...</div>
+      <div class="paginate__page_hide" v-if="page>12">...</div>
       <div class="paginate__page"
-      v-for="pageNum in maxPage"
+      v-for="pageNum in pages"
       :key="pageNum"
       :class="{'paginate__page': true, 'paginate__page_active': page === pageNum}"
       @click="changePage(pageNum)"
     >
       {{ pageNum }}</div>
-      <div class="paginate__page_hide">...</div>
+      <div class="paginate__page_hide" v-if="page<39">...</div>
       <div class="paginate__page"
+        v-if="page<40"
         :class="{'paginate__page': true, 'paginate__page_active': page === totalPages }"
         @click="changePage(totalPages)"
       >
@@ -57,16 +58,18 @@ export default {
       page: 1,
       limit: 10,
       totalPages: 0,
-      firstPage: 6,
-      maxPage: 20,
-      shift: 0,
       startPage: 1
     }
   },
   computed: {
-    getShift() {
-      return 0 ? this.page < 10: this.shift + this.page
-    }
+  pages() {
+    let numShown = 21;   // This sets the number of page tabs
+    numShown = Math.min(numShown, this.totalPages);
+    let first = this.page - Math.floor(numShown / 2);
+    first = Math.max(first, 1);
+    first = Math.min(first, this.totalPages - numShown + 1);
+    return [...Array(numShown)].map((k,i) => i + first);
+  }
   },
   mounted() {
       this.getPosts()
@@ -83,21 +86,19 @@ export default {
       this.getPosts()
     },
     maxPageUp() {
-      if (this.maxPage < this.totalPages ) {
-        this.maxPage += 1
+      if (this.page < this.totalPages ) {
         this.page += 1
       } else {
-        this.maxPage = 50
         this.page= 50
       }
+      console.log(this.totalPages)
+      console.log(this.page)
       this.getPosts()
     },
     maxPageDown() {
       if (this.page > 1) {
-        this.maxPage -= 1
         this.page -= 1
       } else {
-        this.maxPage = 20
         this.page = 1
       }
       this.getPosts()
